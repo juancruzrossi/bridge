@@ -15,6 +15,17 @@ You are generating an implementation plan from a BRIEF.md produced by bridge-int
 4. If multiple exist and no argument matches, list them and ask: "Which feature should I plan?"
 5. Read `.bridge/wip/<feature>/BRIEF.md`. If it does not exist, stop and tell the user to run `/bridge:interview` first.
 
+## 1b. Explore the codebase
+
+Before writing any plan, explore the codebase to ground your tasks in reality:
+
+1. Scan the project structure — identify frameworks, patterns, and conventions in use.
+2. Read files related to the feature described in BRIEF.md — existing models, routes, components, tests.
+3. Identify dependencies and integration points that tasks will need to interact with.
+4. Note existing patterns the implementation should follow (naming conventions, folder structure, error handling style).
+
+This step prevents plans based on assumptions. A plan grounded in the actual codebase is dramatically more executable than one based on guesswork.
+
 ## 2. Generate the plan (single pass)
 
 Read the full BRIEF.md content. Then produce `.bridge/wip/<feature>/PLAN.md` with this structure:
@@ -24,6 +35,15 @@ Read the full BRIEF.md content. Then produce `.bridge/wip/<feature>/PLAN.md` wit
 
 ## Overview
 <!-- 2-3 sentence summary of what will be built and why -->
+
+## File Map
+
+| File | Action | Responsibility |
+|------|--------|---------------|
+| src/auth/login.ts | Create | Login handler with JWT |
+| src/auth/middleware.ts | Modify | Add token validation |
+
+<!-- List ALL files that will be created or modified, with their purpose. This prevents tasks from overlapping or forgetting files. -->
 
 ## Tasks
 
@@ -71,6 +91,15 @@ Rules for task generation:
 - Group into waves: tasks with no unmet dependencies share a wave.
 - Derive acceptance criteria directly from the BRIEF's requirements.
 
+**No placeholders allowed.** Every task must contain concrete, specific values. The following are banned from task descriptions:
+- "TBD", "TODO", "implement later", "to be determined"
+- "add appropriate error handling" (specify WHAT error handling)
+- "similar to Task N" (spell out what's needed)
+- "align X with Y" (state the concrete target)
+- "add necessary tests" (specify WHICH test cases)
+
+If you can't be specific, the brief needs more detail — go back to `/bridge:interview`.
+
 ## 3. Adversarial self-review
 
 After writing the plan, perform a second pass asking:
@@ -80,6 +109,7 @@ After writing the plan, perform a second pass asking:
 3. **Scope creep**: Does any task exceed what the BRIEF asks for?
 4. **Integration risk**: Will the waves actually work in parallel, or are there hidden coupling points?
 5. **Rollback**: If a wave fails, can we revert cleanly?
+6. **Requirements coverage**: Does every requirement from the BRIEF appear in at least one task? List any BRIEF requirements not covered by the plan.
 
 Append findings as a section to PLAN.md:
 
@@ -91,6 +121,7 @@ Append findings as a section to PLAN.md:
 
 ### Adjustments made
 - ...
+- If coverage gaps are found, add tasks to address them or document why they're intentionally deferred.
 ```
 
 Update the task table and waves if the review surfaces real issues. Note what changed.

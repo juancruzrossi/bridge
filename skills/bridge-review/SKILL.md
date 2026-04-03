@@ -31,6 +31,20 @@ You are running the bridge-review skill. Follow these steps exactly.
    - `✗ missing` — task not implemented at all.
 4. Calculate completion score: `X/Y tasks completed` (partial counts as 0.5).
 
+## Step 2.5: Anti-pattern Scan
+
+Scan ALL files modified by this feature (not just those linked to specific truths). Use targeted searches:
+
+| Pattern | What to search | Severity |
+|---------|---------------|----------|
+| Incomplete work | `TODO`, `FIXME`, `XXX`, `HACK` | Warning |
+| Placeholder content | `placeholder`, `coming soon`, `lorem ipsum`, `example.com` | Blocking |
+| Empty implementations | `return null`, `return {}`, `return []`, `=> {}`, `pass` as sole function body | Blocking |
+| Hardcoded secrets | `sk_test_`, `your-api-key-here`, `password123` | Blocking |
+| Debug leftovers | `console.log`, `print(`, `debugger`, `binding.pry` | Warning |
+
+Use Grep to execute these searches across the changed files. Record all findings — they feed into the Issues section of REVIEW.md.
+
 ## Step 3: Layer 2 — Goal-Backward Verification
 
 1. Read the **Problem** section of `BRIEF.md`.
@@ -61,6 +75,11 @@ You are running the bridge-review skill. Follow these steps exactly.
    - Run existing tests (`npm test`, `pytest`, `cargo test`, or whatever the project uses).
    - If no tests exist for this truth, note it as a gap.
    - Check test output for passes and failures.
+   - **Test quality audit** — passing tests are not enough. Verify the tests actually prove what they claim:
+     - **Disabled test scan**: Search for `it.skip`, `describe.skip`, `xit`, `xdescribe`, `@pytest.mark.skip`, `@Disabled`, `@Ignore`. Any disabled test linked to a feature requirement means that requirement is NOT tested.
+     - **Assertion strength check**: Classify test assertions. `toBeDefined()` or `assertNotNull` only prove existence — if the requirement demands specific behavior, the test must assert specific values or outcomes. Weak assertions on critical requirements = gap.
+     - **Circular test detection**: Watch for tests that generate expected values by running the system under test. These prove consistency, not correctness. Example: `expect(calculate(x)).toBe(calculate(x))` proves nothing.
+   - Flag any findings as warnings in the review.
 
 4. Assign a status per truth:
    - `PASS` — all 4 levels verified.
@@ -121,6 +140,8 @@ You are running the bridge-review skill. Follow these steps exactly.
    - **FAIL** — any task missing, any truth fails, or any blocking issue exists.
 
 ## Step 5: Report to User
+
+**Evidence freshness rule.** The verdict in REVIEW.md must be based on evidence gathered during THIS execution of bridge-review. Never reuse a previous REVIEW.md or assume results from a prior run still hold. If Step 3 Level 4 requires running tests, you must run them now and report the actual output — not recall or assume what they would produce.
 
 1. Print a summary of the review to the conversation.
 2. Based on the verdict:

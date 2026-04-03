@@ -32,8 +32,9 @@ For each wave (starting from Wave 1):
 
 1. Identify all tasks in the current wave.
 2. Verify all dependencies for each task are satisfied (completed successfully in previous waves).
-3. If any dependency failed and was not resolved, ask the user how to proceed before starting the wave.
-4. Announce: **"Starting Wave N — Tasks [X, Y, Z]"**
+3. **Check for file conflicts within the wave.** Collect all files listed in the "Files" field of each task in this wave. If two or more tasks modify the same file, they cannot run in parallel — split them into sequential execution within this wave or move one to the next wave. Announce any conflicts found.
+4. If any dependency failed and was not resolved, ask the user how to proceed before starting the wave.
+5. Announce: **"Starting Wave N — Tasks [X, Y, Z]"**
 
 ### 3b. Dispatch parallel subagents
 
@@ -64,6 +65,15 @@ You are executing Task <N>: <title>
    - Commit message: "feat(<feature>): <task-title>" or appropriate type (fix, refactor, etc.)
    - Only include files related to this task in the commit.
 6. Report back: what you did, what files you changed, verification results.
+
+## Status Protocol
+When you finish, report one of these statuses:
+- DONE — task completed, all acceptance criteria verified.
+- DONE_WITH_CONCERNS — task completed but you noticed potential issues (describe them).
+- BLOCKED — cannot complete without additional information or a dependency fix (explain what's missing).
+- NEEDS_CONTEXT — need to understand more about the codebase before proceeding (list specific questions).
+
+If you encounter something unexpected or realize the task is more complex than described, STOP and report BLOCKED. Incomplete work that claims to be done is worse than honestly reporting you're stuck.
 ```
 
 Key principles for subagent dispatch:
@@ -76,7 +86,24 @@ Key principles for subagent dispatch:
 
 1. Wait for all subagents in the wave to complete.
 2. For each task, record the outcome: **completed** or **failed**.
-3. Print a wave summary:
+3. **Verify each completed task.** For each task that reported DONE or DONE_WITH_CONCERNS, dispatch a **verification subagent** (separate from the implementer) with this prompt:
+
+```
+You are verifying Task <N>: <title>
+
+The implementer claims this task is complete. Do NOT trust their report blindly — verify independently.
+
+## Verification checklist
+1. Read the files the implementer claims to have changed. Confirm they exist and contain real implementation.
+2. Check for stubs: empty function bodies, TODO comments, placeholder returns, hardcoded mock values.
+3. Verify the acceptance criteria from the plan are actually met — not just claimed.
+4. If tests were supposed to be written, confirm they exist AND test meaningful behavior (not just that the function is defined).
+5. Report: VERIFIED, CONCERNS (list them), or FAILED (explain why).
+```
+
+If the verification returns CONCERNS or FAILED, report to the user before proceeding.
+
+4. Print a wave summary:
 
 ```
 Wave N complete:
@@ -117,6 +144,14 @@ Failed: [6] (skipped)
 ## 5. Finalize
 
 After all waves complete (or execution is aborted):
+
+**Post-execution cleanup.** Review all files modified during execution for common AI-generated noise:
+1. Remove unnecessary comments that restate what the code already says (e.g., `// increment counter` above `counter++`).
+2. Remove over-documentation: excessive JSDoc on obvious methods, redundant type annotations.
+3. Remove any `console.log` or debug output left behind.
+4. After cleanup, re-run the test suite to confirm nothing broke. If tests fail after cleanup, revert the cleanup changes for that file.
+
+Then proceed with the final report:
 
 1. Print a final execution report:
    - Total tasks: completed, failed, skipped.

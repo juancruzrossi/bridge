@@ -39,6 +39,8 @@ Categorize each gray area into one of these dimensions:
 
 List the gray areas internally (do not show the user the full list). Prioritize by **risk** — which ambiguity, if left unresolved, would cause the most rework later?
 
+Prioritize gray areas in this order: first resolve **Problem** and **Scope** (why this exists and how far it goes), then **Constraints** and **Edge Cases** (limits and unusual scenarios), then **Non-goals** (what's excluded). Understanding intent and boundaries before diving into technical details produces sharper interviews.
+
 ### Phase 3: Socratic Interview Loop
 
 Work through gray areas one question at a time, highest risk first.
@@ -50,7 +52,9 @@ Work through gray areas one question at a time, highest risk first.
 - If partially resolved, ask a follow-up on the same gray area.
 - New gray areas may emerge from answers — add them to the queue.
 
-**Selective Pressure** — After an answer, apply pressure ONLY when the answer is vague, risky, or based on unstated assumptions. Choose the pressure type that fits:
+**Selective Pressure** — After an answer, apply pressure ONLY when the answer is vague, risky, or based on unstated assumptions.
+
+When an answer is vague or risky, escalate through pressure levels in sequence — start with Evidence, then Assumption, then Boundary, then Essence. Stop as soon as the answer becomes clear. Most answers only need one level; reserve Essence for persistent vagueness.
 
 | Pressure | When to apply | Example |
 |----------|--------------|---------|
@@ -65,11 +69,14 @@ Do NOT apply pressure on every answer. If the answer is clear and specific, acce
 
 - **Contrarian**: When the user states something as obvious without evidence. Challenge the core assumption. "What if the opposite were true? What would break?"
 - **Simplifier**: When scope keeps expanding. Push for minimal viable version. "What's the absolute simplest version that still solves the problem? What can we cut?"
+- **Reframer**: When the user keeps describing symptoms instead of root problems. Redirect to the underlying need. "You're describing what happens — what's the actual problem that causes this?"
 
 **Scope Guardrail** — If the user introduces a capability that's clearly a separate feature:
 > "That sounds like its own feature, not part of `<current-feature>`. Want me to note it for later? For now, let's stay focused on `<current-scope>`."
 
 Capture deferred ideas in the Non-goals/Out-of-scope section of the BRIEF.
+
+**Acceptance Criteria Elicitation** — Before closing gray areas, ask "How will we know this is done?" at least once during the interview to derive concrete, testable acceptance criteria for the BRIEF.
 
 ### Phase 4: Readiness Check
 
@@ -81,6 +88,7 @@ Before closing the interview, verify the **minimum checklist**:
 □ Constraints — technical/business limits identified
 □ Edge cases — at least 2-3 non-obvious scenarios addressed
 □ Non-goals — explicit list of what this does NOT do
+□ Decision boundaries — clear what the agent can decide vs what needs user approval
 ```
 
 If any item is uncovered, ask targeted questions to fill the gap. If the user says "that's enough" or "let's move on" before the checklist is complete, respect it — warn them which items are uncovered but proceed.
@@ -113,8 +121,14 @@ Write `.bridge/wip/<feature-name>/BRIEF.md` with this structure:
 ## Non-goals
 <What this feature explicitly does NOT do.>
 
+## Decision Boundaries
+<What the agent can decide on its own without asking. What requires explicit user approval.>
+
 ## Out-of-scope
 <Ideas that came up but belong to separate features.>
+
+## Acceptance Criteria
+<Concrete, testable statements that prove this feature works. At least 3.>
 
 ## Open Items
 <Anything the user chose to skip or defer. Empty if everything was covered.>
