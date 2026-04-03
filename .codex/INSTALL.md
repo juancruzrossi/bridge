@@ -3,7 +3,7 @@
 Add the following to your Codex system prompt or project instructions:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/juancruzrossi/sdd-bridge/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/juancruzrossi/bridge/main/.codex/INSTALL.md
 ```
 
 ## Setup
@@ -12,7 +12,7 @@ Bridge SDD is a Spec-Driven Development framework. To use it with Codex:
 
 1. Clone the repository into your project:
    ```bash
-   git clone https://github.com/juancruzrossi/sdd-bridge.git .bridge-plugin
+   git clone https://github.com/juancruzrossi/bridge.git .bridge-plugin
    ```
 
 2. Read the skills from `.bridge-plugin/skills/` when starting a new feature workflow.

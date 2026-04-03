@@ -6,18 +6,16 @@ A lightweight, token-efficient Spec-Driven Development framework for AI coding a
 interview → plan → execute → review → archive
 ```
 
-No ambiguity survives the interview. No plan ships without adversarial review. No code merges without goal-backward verification. ~900 lines of skill instructions. Zero runtime dependencies.
-
 ## Why Bridge?
 
-Most AI agent failures aren't about bad code — they're about unclear requirements, fantasy plans, context rot, and "done" without evidence. Bridge attacks each failure mode with a specific phase:
+Most AI agent failures aren't about bad code — they're about unclear requirements, fantasy plans, context rot, and "done" without evidence. Bridge addresses each failure mode with a specific phase:
 
 | Failure Mode | Bridge Phase | How |
 |---|---|---|
 | Vague requirements | Interview | Socratic questioning with selective pressure |
 | Plans based on assumptions | Plan | Mandatory codebase exploration + adversarial self-review |
-| Quality degradation on task 8 | Execute | Fresh context window per subagent |
-| "Done" but it's stubs | Review | 4-level goal-backward verification (exists → substantive → wired → functional) |
+| Quality degradation as context window fills | Execute | Fresh context window per subagent |
+| "Done" but it's stubs | Review | 4-level goal-backward verification |
 
 ## Installation
 
@@ -40,7 +38,7 @@ Then install the plugin:
 Tell Codex:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/juancruzrossi/sdd-bridge/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/juancruzrossi/bridge/main/.codex/INSTALL.md
 ```
 
 ## The Workflow
