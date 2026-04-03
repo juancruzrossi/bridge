@@ -1,10 +1,14 @@
-# Bridge SDD
+<div align="center">
 
-A lightweight, token-efficient Spec-Driven Development framework for AI coding agents. Bridge turns vague ideas into verified implementations through disciplined phases — no bloat, no ceremony, just structured execution that fits in a single context window.
+# Bridge
+
+**A lightweight, token-efficient Spec-Driven Development framework for AI coding agents. Turns vague ideas into verified implementations through disciplined phases — no bloat, no ceremony, just structured execution that fits in a single context window.**
 
 ```
 interview → plan → execute → review → archive
 ```
+
+</div>
 
 ## Why Bridge?
 
@@ -113,6 +117,3 @@ Add `.bridge/` to `.gitignore` or commit it — your choice. The artifacts are h
 
 5. **Token-efficient.** Skills are prompt instructions — no runtime, no daemon, no build step. The entire framework is ~900 lines that load only when invoked.
 
-## License
-
-MIT
