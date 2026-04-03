@@ -1,0 +1,20 @@
+{
+  "name": "sdd-bridge",
+  "description": "Development marketplace for Bridge SDD plugin",
+  "owner": {
+    "name": "Juan Cruz Rossi",
+    "url": "https://github.com/juancruzrossi"
+  },
+  "plugins": [
+    {
+      "name": "bridge",
+      "description": "Spec-Driven Development framework for Claude Code — structured interview, planning, execution, and review workflow",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "Juan Cruz Rossi",
+        "url": "https://github.com/juancruzrossi"
+      }
+    }
+  ]
+}

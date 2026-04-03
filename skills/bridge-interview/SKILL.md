@@ -1,0 +1,142 @@
+---
+name: bridge-interview
+description: "[Bridge SDD] Socratic interview with gray-area detection and selective pressure to clarify requirements before planning. Use when starting a new feature, building something complex, or when requirements are ambiguous. Part of the bridge plugin — invoke via /bridge:interview"
+---
+
+# Bridge Interview
+
+Turn vague ideas into execution-ready briefs through structured Socratic interrogation. This skill identifies what's ambiguous, resolves it through targeted questions, and locks decisions into a BRIEF.md that feeds directly into `/bridge:plan`.
+
+## Why This Exists
+
+Most implementation failures trace back to unclear requirements, not bad code. Developers skip straight to planning with unresolved ambiguities — hidden assumptions, unclear scope boundaries, missing edge cases. This interview forces those ambiguities to the surface before a single line of planning happens.
+
+## Procedure
+
+### Phase 1: Setup
+
+1. **Ask for the feature name.** This becomes the directory slug. Ask: "What should we call this feature? (This becomes the folder name in `.bridge/wip/<name>/`)"
+   - Accept kebab-case, spaces, or camelCase — normalize to kebab-case internally
+   - Example: "user authentication" → `user-authentication`
+
+2. **Create the working directory.** Run: `mkdir -p .bridge/wip/<feature-name>/`
+
+3. **Capture the initial description.** Ask the user to describe what they want in their own words. Do not interrupt — let them dump everything first.
+
+### Phase 2: Gray Area Identification
+
+After the user describes their idea, analyze it silently. Identify **gray areas** — points where the description is ambiguous, underspecified, or could be interpreted multiple ways.
+
+Categorize each gray area into one of these dimensions:
+
+| Dimension | What's unclear |
+|-----------|---------------|
+| **Problem** | Why this needs to exist, what pain it solves |
+| **Scope** | How far the change should go, what's included vs excluded |
+| **Constraints** | Technical limits, business rules, dependencies |
+| **Edge Cases** | Unusual inputs, error states, boundary conditions |
+| **Non-goals** | What this explicitly should NOT do |
+
+List the gray areas internally (do not show the user the full list). Prioritize by **risk** — which ambiguity, if left unresolved, would cause the most rework later?
+
+### Phase 3: Socratic Interview Loop
+
+Work through gray areas one question at a time, highest risk first.
+
+**Rules:**
+- Ask exactly ONE question per message. Never batch questions.
+- After the user answers, evaluate whether the gray area is resolved.
+- If resolved, move to the next gray area.
+- If partially resolved, ask a follow-up on the same gray area.
+- New gray areas may emerge from answers — add them to the queue.
+
+**Selective Pressure** — After an answer, apply pressure ONLY when the answer is vague, risky, or based on unstated assumptions. Choose the pressure type that fits:
+
+| Pressure | When to apply | Example |
+|----------|--------------|---------|
+| **Evidence** | User makes a claim without backing | "Can you give a concrete example of when this would happen?" |
+| **Assumption** | Answer relies on something unstated | "What assumption is that based on? What if it's wrong?" |
+| **Boundary** | Scope is expanding or unclear | "Where exactly does this stop? What would you explicitly NOT include?" |
+| **Essence** | User describes symptoms, not root cause | "Is that the actual problem, or a symptom of something deeper?" |
+
+Do NOT apply pressure on every answer. If the answer is clear and specific, accept it and move on. Pressure is a tool for risk, not a ritual.
+
+**Challenge Modes** — Activate these when specific patterns emerge:
+
+- **Contrarian**: When the user states something as obvious without evidence. Challenge the core assumption. "What if the opposite were true? What would break?"
+- **Simplifier**: When scope keeps expanding. Push for minimal viable version. "What's the absolute simplest version that still solves the problem? What can we cut?"
+
+**Scope Guardrail** — If the user introduces a capability that's clearly a separate feature:
+> "That sounds like its own feature, not part of `<current-feature>`. Want me to note it for later? For now, let's stay focused on `<current-scope>`."
+
+Capture deferred ideas in the Non-goals/Out-of-scope section of the BRIEF.
+
+### Phase 4: Readiness Check
+
+Before closing the interview, verify the **minimum checklist**:
+
+```
+□ Problem statement — clear WHY this needs to exist
+□ Scope — explicit boundaries of what's included
+□ Constraints — technical/business limits identified
+□ Edge cases — at least 2-3 non-obvious scenarios addressed
+□ Non-goals — explicit list of what this does NOT do
+```
+
+If any item is uncovered, ask targeted questions to fill the gap. If the user says "that's enough" or "let's move on" before the checklist is complete, respect it — warn them which items are uncovered but proceed.
+
+Example:
+> "We haven't explicitly discussed edge cases yet. I'd like to cover at least a couple — but if you'd rather move on, I can note it as an open item in the brief."
+
+### Phase 5: Generate BRIEF.md
+
+Write `.bridge/wip/<feature-name>/BRIEF.md` with this structure:
+
+```markdown
+# <Feature Name>
+
+## Problem
+<Why this needs to exist. What pain it solves. 2-3 sentences max.>
+
+## Decisions
+<Bulleted list of every decision locked during the interview. Each one specific and actionable.>
+
+- Decision: <what was decided>
+- Decision: <what was decided>
+
+## Constraints
+<Technical limits, business rules, dependencies, performance requirements.>
+
+## Edge Cases
+<Non-obvious scenarios that must be handled.>
+
+## Non-goals
+<What this feature explicitly does NOT do.>
+
+## Out-of-scope
+<Ideas that came up but belong to separate features.>
+
+## Open Items
+<Anything the user chose to skip or defer. Empty if everything was covered.>
+```
+
+Guidelines for the BRIEF:
+- Decisions must be **specific and actionable**, not vague. Bad: "Use a good auth system". Good: "Use JWT with 24h expiry, refresh tokens stored in httpOnly cookies"
+- Each section should be concise — this is a brief, not a spec
+- If the user forced early close, list uncovered checklist items under Open Items
+
+### Phase 6: Handoff
+
+After writing the BRIEF.md, present a summary:
+
+> **Interview complete for `<feature-name>`**
+>
+> Brief saved to `.bridge/wip/<feature-name>/BRIEF.md`
+>
+> Decisions locked: <count>
+> Open items: <count or "none">
+>
+> Ready to plan? Run `/bridge:plan`
+
+If there are open items, also mention:
+> "Note: <N> items were deferred. `/bridge:plan` will work with what we have, but you may want to revisit these during planning."
