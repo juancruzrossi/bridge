@@ -1,6 +1,5 @@
 ---
 description: "Bridge SDD — Execute plan with wave-based parallel subagents"
-argument-hint: '[feature-name]'
 ---
 
 <execution_context>

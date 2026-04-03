@@ -135,16 +135,29 @@ After writing PLAN.md:
 3. If the user declines, go to step 5.
 4. If the user accepts:
    a. First, try to invoke `Skill("codex:adversarial-review")` passing the BRIEF and PLAN content.
-   b. If the skill is not available or fails, fall back to running:
+   b. If the skill is not available or fails, fall back to running codex directly. **Important:** use `--dangerously-auto-approve` to avoid git/trust prompts, and `--quiet` to reduce noise:
       ```
-      codex exec "Review this implementation plan against the brief. Find critical issues, missing edge cases, architectural risks. BRIEF: <brief-content> PLAN: <plan-content>"
+      codex --dangerously-auto-approve exec "You are an adversarial reviewer. Review this implementation plan against the brief. Find critical issues, missing edge cases, architectural risks, dependency gaps.
+
+BRIEF:
+<brief-content>
+
+PLAN:
+<plan-content>
+
+Output a structured review with: CRITICAL issues, WARNINGS, and SUGGESTIONS. Be specific — cite task numbers."
       ```
-   c. Append Codex feedback as a new section in PLAN.md:
+   c. **Present Codex feedback to the user for decision.** Show the full Codex review and ask:
+      > "Codex review above. What do you want to do?"
+      > 1. Apply all suggestions — I update the plan
+      > 2. Cherry-pick — tell me which ones to apply
+      > 3. Ignore — keep the plan as-is
+   d. **Do NOT modify the plan without explicit user approval.** Wait for the user's decision before making any changes.
+   e. If the user chooses to apply changes, update PLAN.md and append:
       ```markdown
       ## Codex Review
-      <!-- Codex feedback here -->
+      <!-- Codex feedback and user-approved changes noted here -->
       ```
-   d. If Codex raised valid issues, update the plan accordingly and note changes.
 
 ## 5. Finalize
 

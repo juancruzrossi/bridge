@@ -15,15 +15,21 @@ Most implementation failures trace back to unclear requirements, not bad code. D
 
 ### Phase 1: Setup
 
-1. **Ask for the feature name.** This becomes the directory slug. Ask: "What should we call this feature? (This becomes the folder name in `.bridge/wip/<name>/`)"
+1. **Check git status.** Run `git rev-parse --is-inside-work-tree 2>/dev/null` silently.
+   - If the project IS a git repo: proceed silently (no message to user).
+   - If the project is NOT a git repo: ask the user: "This project doesn't have git initialized. Want me to run `git init`? (If not, we'll work without version control — no commits during execute.)"
+     - If user says yes: run `git init` and proceed.
+     - If user says no: proceed without git. Set a mental flag: **NO_GIT=true** — skip all git/commit operations in subsequent phases.
+
+2. **Ask for the feature name.** This becomes the directory slug. Ask: "What should we call this feature? (This becomes the folder name in `.bridge/wip/<name>/`)"
    - Accept kebab-case, spaces, or camelCase — normalize to kebab-case internally
    - Example: "user authentication" → `user-authentication`
 
-2. **Create the working directory.** Run: `mkdir -p .bridge/wip/<feature-name>/`
+3. **Create the working directory.** Run: `mkdir -p .bridge/wip/<feature-name>/`
 
-3. **Capture the initial description.** Ask the user to describe what they want in their own words. Do not interrupt — let them dump everything first.
+4. **Capture the initial description.** Ask the user to describe what they want in their own words. Do not interrupt — let them dump everything first.
 
-### Phase 2: Gray Area Identification
+### Phase 2: Gray Area Identification (internal)
 
 After the user describes their idea, analyze it silently. Identify **gray areas** — points where the description is ambiguous, underspecified, or could be interpreted multiple ways.
 
@@ -97,6 +103,8 @@ Example:
 > "We haven't explicitly discussed edge cases yet. I'd like to cover at least a couple — but if you'd rather move on, I can note it as an open item in the brief."
 
 ### Phase 5: Generate BRIEF.md
+
+**Git context.** If the project has git initialized, add a line at the top of BRIEF.md: `**Git:** yes`. If NO_GIT was set during setup, add: `**Git:** no — skip all commit/branch operations in subsequent phases`.
 
 Write `.bridge/wip/<feature-name>/BRIEF.md` with this structure:
 

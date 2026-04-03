@@ -1,6 +1,5 @@
 ---
 description: "Bridge SDD — Show progress of all features"
-argument-hint: ''
 ---
 
 <execution_context>

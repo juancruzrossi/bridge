@@ -15,6 +15,7 @@ Bridge is a Spec-Driven Development framework. It provides a structured workflow
 | `/bridge:plan` | Planning | Implementation plan with adversarial review → generates PLAN.md |
 | `/bridge:execute` | Implementation | Wave-based parallel execution with fresh subagents |
 | `/bridge:review` | Verification | Plan vs implementation + goal-backward verification |
+| `/bridge:address-review` | Remediation | Fix blocking issues and warnings from REVIEW.md |
 | `/bridge:quick` | Fast-path | Mini-interview + inline plan + execute + light review (no files) |
 | `/bridge:debug` | Diagnosis | Root-cause investigation for bugs and failures |
 | `/bridge:status` | State | Show progress of all features in .bridge/wip/ |
@@ -24,8 +25,8 @@ Bridge is a Spec-Driven Development framework. It provides a structured workflow
 
 ```
 interview → plan → execute → review → archive
-                                ↕
-                              debug
+                                ↕         ↑
+                              debug   address-review
 ```
 
 ## When to Suggest Bridge

@@ -61,9 +61,10 @@ You are executing Task <N>: <title>
    - If a build system exists: run the build and ensure it succeeds.
    - If a linter is configured: run it and fix any issues.
    - If none of the above exist: manually verify the acceptance criteria.
-5. Make an atomic commit for this task using conventional commits format.
+5. **If the project has git initialized**, make an atomic commit for this task using conventional commits format.
    - Commit message: "feat(<feature>): <task-title>" or appropriate type (fix, refactor, etc.)
    - Only include files related to this task in the commit.
+   - If the project has NO git (check BRIEF.md for `**Git:** no` or run `git rev-parse --is-inside-work-tree`), skip the commit step entirely.
 6. Report back: what you did, what files you changed, verification results.
 
 ## Status Protocol
@@ -81,6 +82,12 @@ Key principles for subagent dispatch:
 - Each subagent receives the full BRIEF.md and PLAN.md so it understands the broader picture.
 - Each subagent is responsible for its own verification and commit.
 - Dispatch all tasks in the wave **in parallel** using separate Agent tool calls.
+
+**Model routing (optional).** If the runtime supports model selection for subagents, classify each task before dispatch:
+- **ROUTINE** (file creation, config, formatting, simple wiring) → use `haiku` or cheapest available model.
+- **MODERATE** (business logic, API endpoints, component implementation) → use `sonnet` or mid-tier model.
+- **COMPLEX** (debugging, architectural wiring, security-sensitive, error handling) → use `opus` or premium model.
+If the runtime does not support model selection, ignore this and dispatch all with the default model.
 
 ### 3c. Collect results
 
@@ -145,7 +152,11 @@ Failed: [6] (skipped)
 
 After all waves complete (or execution is aborted):
 
-**Post-execution cleanup.** Review all files modified during execution for common AI-generated noise:
+**Post-execution cleanup.**
+
+First, if running on Claude Code, invoke `Skill("simplify")` on all modified files to check for reuse opportunities, code quality, and efficiency issues. If the skill is not available or you're on a different runtime, skip this silently.
+
+Then review all files modified during execution for common AI-generated noise:
 1. Remove unnecessary comments that restate what the code already says (e.g., `// increment counter` above `counter++`).
 2. Remove over-documentation: excessive JSDoc on obvious methods, redundant type annotations.
 3. Remove any `console.log` or debug output left behind.

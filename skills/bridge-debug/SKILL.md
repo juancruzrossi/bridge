@@ -68,6 +68,6 @@ Systematic root-cause investigation for bugs and failures. Four phases: investig
 
 18. **Run tests.** Execute the project's test suite to confirm no regressions.
 
-19. **Commit the fix.** Make an atomic commit describing the root cause and the fix.
+19. **Commit the fix (if git is initialized).** Run `git rev-parse --is-inside-work-tree 2>/dev/null` — if the project has git, make an atomic commit describing the root cause and the fix. If no git, skip this step.
 
 20. **Suggest next step.** Report: "Fixed! Run `/bridge:review` to verify the full feature still works."

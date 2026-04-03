@@ -1,6 +1,5 @@
 ---
 description: "Bridge SDD — Verify implementation against plan and brief"
-argument-hint: '[feature-name]'
 ---
 
 <execution_context>

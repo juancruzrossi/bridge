@@ -15,7 +15,7 @@ You are running the bridge-review skill. Follow these steps exactly.
 
 ## Step 1: Code Quality Check (optional)
 
-1. Attempt to invoke `Skill("simplify")` to check for code quality issues in files changed by this feature. If the skill is not available, skip this step silently and continue.
+1. **Claude Code only:** Attempt to invoke `Skill("simplify")` to check for code quality issues in files changed by this feature. If you are not running on Claude Code, or the skill is not available, skip this step silently and continue.
 2. Note any findings — they will be included in the review report under "Code Quality".
 
 ## Step 2: Layer 1 — Plan vs Implementation (Completeness Check)
@@ -144,6 +144,12 @@ Use Grep to execute these searches across the changed files. Record all findings
 **Evidence freshness rule.** The verdict in REVIEW.md must be based on evidence gathered during THIS execution of bridge-review. Never reuse a previous REVIEW.md or assume results from a prior run still hold. If Step 3 Level 4 requires running tests, you must run them now and report the actual output — not recall or assume what they would produce.
 
 1. Print a summary of the review to the conversation.
-2. Based on the verdict:
-   - **PASS or PASS WITH WARNINGS:** Say: "All good! Run /bridge:archive to archive this feature."
-   - **FAIL:** Say: "Issues found. Fix them and run /bridge:review again, or use /bridge:debug to investigate."
+2. Based on the verdict, present the user with options:
+   - **PASS (no warnings):** Say: "All clean! Run `/bridge:archive` to archive this feature."
+   - **PASS WITH WARNINGS:** Say: "Review passed but there are warnings. What do you want to do?"
+     > 1. `/bridge:address-review` — fix the warnings automatically
+     > 2. `/bridge:archive` — archive as-is, warnings accepted
+   - **FAIL:** Say: "Issues found. What do you want to do?"
+     > 1. `/bridge:address-review` — fix blocking issues and gaps automatically
+     > 2. `/bridge:debug` — investigate manually
+     > 3. Fix manually and run `/bridge:review` again

@@ -1,6 +1,5 @@
 ---
 description: "Bridge SDD — Archive a completed feature"
-argument-hint: '[feature-name]'
 ---
 
 <execution_context>

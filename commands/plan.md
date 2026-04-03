@@ -1,6 +1,5 @@
 ---
 description: "Bridge SDD — Generate implementation plan from brief with adversarial review"
-argument-hint: '[feature-name]'
 ---
 
 <execution_context>
