@@ -104,7 +104,9 @@ Example:
 
 ### Phase 5: Generate BRIEF.md
 
-**Git context.** If the project has git initialized, add a line at the top of BRIEF.md: `**Git:** yes`. If NO_GIT was set during setup, add: `**Git:** no — skip all commit/branch operations in subsequent phases`.
+**Git context.** Add git metadata at the top of BRIEF.md:
+- If NO_GIT was set: `**Git:** no — skip all commit/branch operations in subsequent phases`
+- If git is initialized: `**Git:** yes` (the Branch line will be added in Phase 6)
 
 Write `.bridge/wip/<feature-name>/BRIEF.md` with this structure:
 
@@ -147,7 +149,25 @@ Guidelines for the BRIEF:
 - Each section should be concise — this is a brief, not a spec
 - If the user forced early close, list uncovered checklist items under Open Items
 
-### Phase 6: Handoff
+### Phase 6: Branch Setup (git repos only)
+
+Skip this phase entirely if NO_GIT=true.
+
+1. Run `git branch --show-current` to get the current branch.
+2. **Stable branches:** `main`, `master`, `develop`, `stage`, `staging`, `production`, `release`.
+3. If the current branch IS a stable branch, ask the user:
+   > "You're on `<branch>`. Want to create a new branch for this work? Pick a type:"
+   > - `feature/<slug>` — new functionality
+   > - `enhancement/<slug>` — improve existing functionality
+   > - `fix/<slug>` — bug fix
+   > - `hotfix/<slug>` — urgent production fix
+   > - Skip — stay on `<branch>`
+   - If the user picks a type: run `git checkout -b <type>/<feature-slug>` and confirm.
+   - If the user picks "skip" or declines: proceed on the current branch.
+4. If the current branch is NOT a stable branch (e.g., already on `feature/something`): proceed silently — the user already branched.
+5. Record the final branch name in BRIEF.md by appending `**Branch:** <branch-name>` below the `**Git:** yes` line.
+
+### Phase 7: Handoff
 
 After writing the BRIEF.md, present a summary:
 
