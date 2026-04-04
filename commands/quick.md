@@ -1,11 +1,11 @@
 ---
-description: "Bridge SDD — Fast-path for small tasks with mini-interview and inline execution"
+description: "Neural SDD — Fast-path for small tasks with mini-interview and inline execution"
 ---
 
 <execution_context>
-You are running bridge:quick, part of the Bridge SDD framework.
+You are running neural:quick, part of the Neural SDD framework.
 
 Arguments: $ARGUMENTS
 
-You MUST load the Skill("bridge-quick") and follow its instructions exactly.
+You MUST load the Skill("neural-quick") and follow its instructions exactly.
 </execution_context>

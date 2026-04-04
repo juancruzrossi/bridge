@@ -1,11 +1,11 @@
 ---
-name: bridge-interview
-description: "[Bridge SDD] Socratic interview with gray-area detection and selective pressure to clarify requirements before planning. Use when starting a new feature, building something complex, or when requirements are ambiguous. Part of the bridge plugin — invoke via /bridge:interview"
+name: neural-interview
+description: "[Neural SDD] Socratic interview with gray-area detection and selective pressure to clarify requirements before planning. Use when starting a new feature, building something complex, or when requirements are ambiguous. Part of the neural plugin — invoke via /neural:interview"
 ---
 
-# Bridge Interview
+# Neural Interview
 
-Turn vague ideas into execution-ready briefs through structured Socratic interrogation. This skill identifies what's ambiguous, resolves it through targeted questions, and locks decisions into a BRIEF.md that feeds directly into `/bridge:plan`.
+Turn vague ideas into execution-ready briefs through structured Socratic interrogation. This skill identifies what's ambiguous, resolves it through targeted questions, and locks decisions into a BRIEF.md that feeds directly into `/neural:plan`.
 
 ## Why This Exists
 
@@ -21,11 +21,11 @@ Most implementation failures trace back to unclear requirements, not bad code. D
      - If user says yes: run `git init` and proceed.
      - If user says no: proceed without git. Set a mental flag: **NO_GIT=true** — skip all git/commit operations in subsequent phases.
 
-2. **Ask for the feature name.** This becomes the directory slug. Ask: "What should we call this feature? (This becomes the folder name in `.bridge/wip/<name>/`)"
+2. **Ask for the feature name.** This becomes the directory slug. Ask: "What should we call this feature? (This becomes the folder name in `.neural/wip/<name>/`)"
    - Accept kebab-case, spaces, or camelCase — normalize to kebab-case internally
    - Example: "user authentication" → `user-authentication`
 
-3. **Create the working directory.** Run: `mkdir -p .bridge/wip/<feature-name>/`
+3. **Create the working directory.** Run: `mkdir -p .neural/wip/<feature-name>/`
 
 4. **Capture the initial description.** Ask the user to describe what they want in their own words. Do not interrupt — let them dump everything first.
 
@@ -128,7 +128,7 @@ This step is cheap and prevents the most expensive type of rework: building on w
 - If NO_GIT was set: `**Git:** no — skip all commit/branch operations in subsequent phases`
 - If git is initialized: `**Git:** yes` (the Branch line will be added in Phase 6)
 
-Write `.bridge/wip/<feature-name>/BRIEF.md` with this structure:
+Write `.neural/wip/<feature-name>/BRIEF.md` with this structure:
 
 ```markdown
 # <Feature Name>
@@ -193,12 +193,12 @@ After writing the BRIEF.md, present a summary:
 
 > **Interview complete for `<feature-name>`**
 >
-> Brief saved to `.bridge/wip/<feature-name>/BRIEF.md`
+> Brief saved to `.neural/wip/<feature-name>/BRIEF.md`
 >
 > Decisions locked: <count>
 > Open items: <count or "none">
 >
-> Ready to plan? Run `/bridge:plan`
+> Ready to plan? Run `/neural:plan`
 
 If there are open items, also mention:
-> "Note: <N> items were deferred. `/bridge:plan` will work with what we have, but you may want to revisit these during planning."
+> "Note: <N> items were deferred. `/neural:plan` will work with what we have, but you may want to revisit these during planning."

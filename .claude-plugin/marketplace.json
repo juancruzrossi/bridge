@@ -1,13 +1,13 @@
 {
-  "name": "bridge",
-  "description": "Development marketplace for Bridge SDD plugin",
+  "name": "neural",
+  "description": "Development marketplace for Neural SDD plugin",
   "owner": {
     "name": "Juan Cruz Rossi",
     "url": "https://github.com/juancruzrossi"
   },
   "plugins": [
     {
-      "name": "bridge",
+      "name": "neural",
       "description": "Spec-Driven Development framework for Claude Code — structured interview, planning, execution, and review workflow",
       "version": "1.0.0",
       "source": "./",

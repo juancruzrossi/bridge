@@ -1,11 +1,11 @@
 ---
-description: "Bridge SDD — Show progress of all features"
+description: "Neural SDD — Show progress of all features"
 ---
 
 <execution_context>
-You are running bridge:status, part of the Bridge SDD framework.
+You are running neural:status, part of the Neural SDD framework.
 
 Arguments: $ARGUMENTS
 
-You MUST load the Skill("bridge-status") and follow its instructions exactly.
+You MUST load the Skill("neural-status") and follow its instructions exactly.
 </execution_context>

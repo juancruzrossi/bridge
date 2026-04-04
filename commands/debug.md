@@ -1,11 +1,11 @@
 ---
-description: "Bridge SDD — Systematic root-cause debugging"
+description: "Neural SDD — Systematic root-cause debugging"
 ---
 
 <execution_context>
-You are running bridge:debug, part of the Bridge SDD framework.
+You are running neural:debug, part of the Neural SDD framework.
 
 Arguments: $ARGUMENTS
 
-You MUST load the Skill("bridge-debug") and follow its instructions exactly.
+You MUST load the Skill("neural-debug") and follow its instructions exactly.
 </execution_context>

@@ -1,11 +1,11 @@
 ---
-description: "Bridge SDD — Socratic interview to clarify requirements before planning"
+description: "Neural SDD — Socratic interview to clarify requirements before planning"
 ---
 
 <execution_context>
-You are running bridge:interview, part of the Bridge SDD framework.
+You are running neural:interview, part of the Neural SDD framework.
 
 Arguments: $ARGUMENTS
 
-You MUST load the Skill("bridge-interview") and follow its instructions exactly.
+You MUST load the Skill("neural-interview") and follow its instructions exactly.
 </execution_context>

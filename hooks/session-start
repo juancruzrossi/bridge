@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# SessionStart hook for Bridge SDD plugin
+# SessionStart hook for Neural SDD plugin
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Read using-bridge skill content
-using_bridge_content=$(cat "${PLUGIN_ROOT}/skills/using-bridge/SKILL.md" 2>&1 || echo "Error reading using-bridge skill")
+# Read using-neural skill content
+using_neural_content=$(cat "${PLUGIN_ROOT}/skills/using-neural/SKILL.md" 2>&1 || echo "Error reading using-neural skill")
 
 # Escape string for JSON embedding
 escape_for_json() {
@@ -20,8 +20,8 @@ escape_for_json() {
     printf '%s' "$s"
 }
 
-using_bridge_escaped=$(escape_for_json "$using_bridge_content")
-session_context="<IMPORTANT>\nBridge SDD is installed.\n\n${using_bridge_escaped}\n</IMPORTANT>"
+using_neural_escaped=$(escape_for_json "$using_neural_content")
+session_context="<IMPORTANT>\nNeural SDD is installed.\n\n${using_neural_escaped}\n</IMPORTANT>"
 
 # Platform detection
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then

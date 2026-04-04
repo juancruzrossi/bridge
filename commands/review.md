@@ -1,11 +1,11 @@
 ---
-description: "Bridge SDD — Verify implementation against plan and brief"
+description: "Neural SDD — Verify implementation against plan and brief"
 ---
 
 <execution_context>
-You are running bridge:review, part of the Bridge SDD framework.
+You are running neural:review, part of the Neural SDD framework.
 
 Arguments: $ARGUMENTS
 
-You MUST load the Skill("bridge-review") and follow its instructions exactly.
+You MUST load the Skill("neural-review") and follow its instructions exactly.
 </execution_context>

@@ -1,20 +1,20 @@
 ---
-name: bridge-execute
-description: "[Bridge SDD] Wave-based parallel execution with fresh subagents and atomic commits. Part of the bridge plugin — invoke via /bridge:execute"
+name: neural-execute
+description: "[Neural SDD] Wave-based parallel execution with fresh subagents and atomic commits. Part of the neural plugin — invoke via /neural:execute"
 ---
 
-# Bridge Execute — Wave-Based Parallel Execution
+# Neural Execute — Wave-Based Parallel Execution
 
-You are executing an implementation plan from a PLAN.md produced by bridge-plan.
+You are executing an implementation plan from a PLAN.md produced by neural-plan.
 
 ## 1. Locate the feature
 
-1. List directories under `.bridge/wip/`.
+1. List directories under `.neural/wip/`.
 2. If exactly one feature directory exists, use it automatically.
 3. If multiple exist and the user passed `$ARGUMENTS` matching a feature name, use that one.
 4. If multiple exist and no argument matches, list them and ask: "Which feature should I execute?"
-5. Read `.bridge/wip/<feature>/PLAN.md`. If it does not exist, stop and tell the user to run `/bridge:plan` first.
-6. Read `.bridge/wip/<feature>/BRIEF.md` for context. If it does not exist, warn but continue with PLAN.md only.
+5. Read `.neural/wip/<feature>/PLAN.md`. If it does not exist, stop and tell the user to run `/neural:plan` first.
+6. Read `.neural/wip/<feature>/BRIEF.md` for context. If it does not exist, warn but continue with PLAN.md only.
 
 ## 2. Parse tasks and build the dependency graph
 
@@ -201,5 +201,5 @@ Then proceed with the final report:
    - Total tasks: completed, failed, skipped.
    - List of all commits made (hash + message).
    - Any warnings or notes from subagents.
-2. If all tasks completed successfully, suggest: **"Ready to review? Run `/bridge:review`"**
+2. If all tasks completed successfully, suggest: **"Ready to review? Run `/neural:review`"**
 3. If some tasks failed or were skipped, suggest the user address remaining issues before review.

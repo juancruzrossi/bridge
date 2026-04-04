@@ -1,17 +1,17 @@
 ---
-name: bridge-review
-description: "[Bridge SDD] Plan vs implementation verification with goal-backward analysis. Part of the bridge plugin — invoke via /bridge:review"
+name: neural-review
+description: "[Neural SDD] Plan vs implementation verification with goal-backward analysis. Part of the neural plugin — invoke via /neural:review"
 ---
 
-# Bridge Review — Plan vs Implementation Verification
+# Neural Review — Plan vs Implementation Verification
 
-You are running the bridge-review skill. Follow these steps exactly.
+You are running the neural-review skill. Follow these steps exactly.
 
 ## Step 0: Setup
 
-1. Determine the feature name from `$ARGUMENTS`. If empty, scan `.bridge/wip/` for a single directory — use it. If multiple exist, ask the user which feature to review.
-2. Set `WIP=.bridge/wip/<feature>/`.
-3. Read `$WIP/BRIEF.md` and `$WIP/PLAN.md`. If either is missing, abort with: "Missing BRIEF.md or PLAN.md. Run /bridge:plan first."
+1. Determine the feature name from `$ARGUMENTS`. If empty, scan `.neural/wip/` for a single directory — use it. If multiple exist, ask the user which feature to review.
+2. Set `WIP=.neural/wip/<feature>/`.
+3. Read `$WIP/BRIEF.md` and `$WIP/PLAN.md`. If either is missing, abort with: "Missing BRIEF.md or PLAN.md. Run /neural:plan first."
 
 ## Step 1: Code Quality Check (optional)
 
@@ -141,15 +141,15 @@ Use Grep to execute these searches across the changed files. Record all findings
 
 ## Step 5: Report to User
 
-**Evidence freshness rule.** The verdict in REVIEW.md must be based on evidence gathered during THIS execution of bridge-review. Never reuse a previous REVIEW.md or assume results from a prior run still hold. If Step 3 Level 4 requires running tests, you must run them now and report the actual output — not recall or assume what they would produce.
+**Evidence freshness rule.** The verdict in REVIEW.md must be based on evidence gathered during THIS execution of neural-review. Never reuse a previous REVIEW.md or assume results from a prior run still hold. If Step 3 Level 4 requires running tests, you must run them now and report the actual output — not recall or assume what they would produce.
 
 1. Print a summary of the review to the conversation.
 2. Based on the verdict, present the user with options:
-   - **PASS (no warnings):** Say: "All clean! Run `/bridge:archive` to archive this feature."
+   - **PASS (no warnings):** Say: "All clean! Run `/neural:archive` to archive this feature."
    - **PASS WITH WARNINGS:** Say: "Review passed but there are warnings. What do you want to do?"
-     > 1. `/bridge:address-review` — fix the warnings automatically
-     > 2. `/bridge:archive` — archive as-is, warnings accepted
+     > 1. `/neural:address-review` — fix the warnings automatically
+     > 2. `/neural:archive` — archive as-is, warnings accepted
    - **FAIL:** Say: "Issues found. What do you want to do?"
-     > 1. `/bridge:address-review` — fix blocking issues and gaps automatically
-     > 2. `/bridge:debug` — investigate manually
-     > 3. Fix manually and run `/bridge:review` again
+     > 1. `/neural:address-review` — fix blocking issues and gaps automatically
+     > 2. `/neural:debug` — investigate manually
+     > 3. Fix manually and run `/neural:review` again

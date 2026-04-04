@@ -1,9 +1,9 @@
 ---
-name: bridge-debug
-description: "[Bridge SDD] Systematic root-cause investigation for bugs and failures. Part of the bridge plugin — invoke via /bridge:debug"
+name: neural-debug
+description: "[Neural SDD] Systematic root-cause investigation for bugs and failures. Part of the neural plugin — invoke via /neural:debug"
 ---
 
-# Bridge Debug
+# Neural Debug
 
 Systematic root-cause investigation for bugs and failures. Four phases: investigate, analyze, hypothesize, implement.
 
@@ -15,7 +15,7 @@ Systematic root-cause investigation for bugs and failures. Four phases: investig
 
 1. **Read the bug description from the arguments.** If no description was provided, ask: "What bug or error are you seeing? Paste the error message, describe the behavior, or point me to the failing code."
 
-2. **Check for Bridge feature context.** Look for `.bridge/wip/` directories. If the bug relates to an active feature, read its `BRIEF.md` and `PLAN.md` for architectural context and intended behavior.
+2. **Check for Neural feature context.** Look for `.neural/wip/` directories. If the bug relates to an active feature, read its `BRIEF.md` and `PLAN.md` for architectural context and intended behavior.
 
 ### Phase 1: INVESTIGATE
 
@@ -70,4 +70,4 @@ Systematic root-cause investigation for bugs and failures. Four phases: investig
 
 19. **Commit the fix (if git is initialized).** Run `git rev-parse --is-inside-work-tree 2>/dev/null` — if the project has git, make an atomic commit describing the root cause and the fix. If no git, skip this step.
 
-20. **Suggest next step.** Report: "Fixed! Run `/bridge:review` to verify the full feature still works."
+20. **Suggest next step.** Report: "Fixed! Run `/neural:review` to verify the full feature still works."

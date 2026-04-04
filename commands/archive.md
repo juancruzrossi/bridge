@@ -1,11 +1,11 @@
 ---
-description: "Bridge SDD — Archive a completed feature"
+description: "Neural SDD — Archive a completed feature"
 ---
 
 <execution_context>
-You are running bridge:archive, part of the Bridge SDD framework.
+You are running neural:archive, part of the Neural SDD framework.
 
 Arguments: $ARGUMENTS
 
-You MUST load the Skill("bridge-archive") and follow its instructions exactly.
+You MUST load the Skill("neural-archive") and follow its instructions exactly.
 </execution_context>
