@@ -135,9 +135,9 @@ After writing PLAN.md:
 3. If the user declines, go to step 5.
 4. If the user accepts:
    a. First, try to invoke `Skill("codex:adversarial-review")` passing the BRIEF and PLAN content.
-   b. If the skill is not available or fails, fall back to running codex directly. **Important:** use `--dangerously-auto-approve` to avoid git/trust prompts, and `--quiet` to reduce noise:
+   b. If the skill is not available or fails, fall back to running codex directly. **Important:** use `--dangerously-bypass-approvals-and-sandbox` to avoid git/trust prompts:
       ```
-      codex --dangerously-auto-approve exec "You are an adversarial reviewer. Review this implementation plan against the brief. Find critical issues, missing edge cases, architectural risks, dependency gaps.
+      codex --dangerously-bypass-approvals-and-sandbox exec "You are an adversarial reviewer. Review this implementation plan against the brief. Find critical issues, missing edge cases, architectural risks, dependency gaps.
 
 BRIEF:
 <brief-content>
