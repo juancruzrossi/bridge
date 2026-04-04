@@ -2,7 +2,7 @@
 
 # Bridge
 
-**A lightweight, token-efficient Spec-Driven Development framework for AI coding agents. Turns vague ideas into verified implementations through disciplined phases — no bloat, no ceremony, just structured execution that fits in a single context window.**
+**A lightweight, token-efficient Spec-Driven Development framework for AI coding agents. Turns vague ideas into verified implementations through disciplined phases — no bloat, no ceremony, just structured execution that works.**
 
 ```
 interview → plan → execute → review → archive
