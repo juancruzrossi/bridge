@@ -137,7 +137,9 @@ After writing PLAN.md:
    a. First, try to invoke `Skill("codex:adversarial-review")` passing the BRIEF and PLAN content.
    b. If the skill is not available or fails, fall back to running codex directly. **Important:** use `--dangerously-bypass-approvals-and-sandbox` to avoid git/trust prompts:
       ```
-      codex --dangerously-bypass-approvals-and-sandbox exec "You are an adversarial reviewer. Review this implementation plan against the brief. Find critical issues, missing edge cases, architectural risks, dependency gaps.
+      codex exec --dangerously-bypass-approvals-and-sandbox -c 'model_reasoning_effort="high"' "Context: <project-name> (<tech stack detected from codebase>). Relevant docs: @/CLAUDE.md
+
+You are an adversarial reviewer. Review this implementation plan against the brief. Find critical issues, missing edge cases, architectural risks, dependency gaps.
 
 BRIEF:
 <brief-content>
