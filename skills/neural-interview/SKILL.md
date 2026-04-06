@@ -13,7 +13,7 @@ Most implementation failures trace back to unclear requirements, not bad code. D
 
 ## Language
 
-Respond in the same language the user uses to ask questions.
+Respond in the same language as the user.
 
 ## Procedure
 
