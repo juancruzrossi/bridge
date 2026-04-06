@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Spec-Driven Development framework for AI coding agents",
   "author": "Juan Cruz Rossi",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/juancruzrossi/neural"
