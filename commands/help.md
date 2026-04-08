@@ -9,8 +9,8 @@ You are running neural:help. Print the following reference and nothing else.
 Neural SDD — Command Reference
 
 Workflow:
-  /neural:interview      Socratic interview → generates BRIEF.md
-  /neural:plan           Implementation plan with adversarial review → generates PLAN.md
+  /neural:interview      Detailed interview → generates BRIEF.md
+  /neural:plan           Implementation plan with optional adversarial review → generates PLAN.md
   /neural:execute        Wave-based parallel execution with fresh subagents
   /neural:review         Plan vs implementation + goal-backward verification
   /neural:address-review Fix blocking issues and warnings from REVIEW.md
