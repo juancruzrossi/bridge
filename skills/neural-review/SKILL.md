@@ -6,40 +6,22 @@ keep-coding-instructions: true
 
 # Neural Review — Plan vs Implementation Verification
 
-## Step 0: Dispatch with Fresh Context
+## Step 1: Dispatch Independent Reviewer
 
-The review must run in a clean context window — free from execution noise, prior assumptions, and accumulated state. This is critical: a reviewer biased by the implementer's context will confirm rather than verify.
+The review must run in a clean context window — a reviewer biased by the implementer's context will confirm rather than verify.
 
-1. Read `$ARGUMENTS` to determine the feature name. If empty, scan `.neural/wip/` — one match → use it, multiple → ask.
-2. Read `.neural/wip/<feature>/BRIEF.md` and `.neural/wip/<feature>/PLAN.md`.
-3. Dispatch a single subagent using the Agent tool with this prompt:
+1. Determine the feature name from `$ARGUMENTS`. If empty, scan `.neural/wip/` — one match → use it, multiple → ask.
+2. Set `WIP=.neural/wip/<feature>/`.
+3. Read `$WIP/BRIEF.md` and `$WIP/PLAN.md`. If either is missing, abort: "Run /neural:plan first."
+4. Dispatch a subagent using the Agent tool. The subagent prompt must include:
+   - The full content of BRIEF.md and PLAN.md (embedded, not as file paths)
+   - The WIP path so it can write REVIEW.md
+   - Steps 2 through 8 below as its procedure
+5. When the subagent completes, relay its verdict and options to the user verbatim.
 
-```
-You are an independent reviewer for the Neural SDD framework. You have NOT seen the implementation process — you are verifying from scratch.
-
-## Feature Specs
-<Full BRIEF.md content>
-
-## Implementation Plan
-<Full PLAN.md content>
-
-## Your Task
-Follow the review procedure below exactly. Write REVIEW.md and report the verdict.
-
-<Paste Steps 1-8 below into the subagent prompt>
-```
-
-4. When the subagent completes, relay its verdict and options to the user. Do not add your own interpretation.
-
-**Stop here.** Everything below is the procedure the subagent executes — do not run it yourself.
+**You (the parent) stop here. Everything below is the subagent's procedure.**
 
 ---
-
-## Step 1: Setup
-
-1. Determine the feature name from `$ARGUMENTS`. If empty, scan `.neural/wip/` for a single directory — use it. If multiple exist, ask the user which feature to review.
-2. Set `WIP=.neural/wip/<feature>/`.
-3. Read `$WIP/BRIEF.md` and `$WIP/PLAN.md`. If either is missing, abort with: "Missing BRIEF.md or PLAN.md. Run /neural:plan first."
 
 ## Step 2: Load Stack-Relevant Skills
 
@@ -50,12 +32,12 @@ Follow the review procedure below exactly. Write REVIEW.md and report the verdic
 
 ## Step 3: Code Quality Check (optional)
 
-1. **Claude Code only:** Attempt to invoke `Skill("simplify")` to check for code quality issues in files changed by this feature. If you are not running on Claude Code, or the skill is not available, skip this step silently and continue.
+1. **Claude Code only:** Attempt to invoke `Skill("simplify")` to check for code quality issues in files changed by this feature. If not available, skip silently.
 2. Note any findings — they will be included in the review report under "Code Quality".
 
 ## Step 4: Layer 1 — Plan vs Implementation (Completeness Check)
 
-1. Parse every task from `PLAN.md`. Each task typically has: description, expected files, expected functions/components, expected tests.
+1. Parse every task from PLAN.md. Each task typically has: description, expected files, expected functions/components, expected tests.
 2. For each task, verify:
    - **Files created/modified** — use Glob and Read to confirm the files exist and were changed.
    - **Functions/components added** — use Grep to confirm the expected symbols exist in the codebase.
@@ -68,7 +50,7 @@ Follow the review procedure below exactly. Write REVIEW.md and report the verdic
 
 ## Step 5: Anti-pattern Scan
 
-Scan ALL files modified by this feature (not just those linked to specific truths). Use targeted searches:
+Scan ALL files modified by this feature. Use targeted searches:
 
 | Pattern | What to search | Severity |
 |---------|---------------|----------|
@@ -82,7 +64,7 @@ Use Grep to execute these searches across the changed files. Record all findings
 
 ## Step 6: Layer 2 — Goal-Backward Verification
 
-1. Read the **Problem** section of `BRIEF.md`.
+1. Read the **Problem** section of BRIEF.md.
 2. Derive "observable truths" — concrete, testable statements that must hold if the problem is truly solved. Example: "A user can POST /api/orders and receive a 201 with an order ID."
 3. For each observable truth, verify 4 levels:
 
@@ -123,7 +105,7 @@ Use Grep to execute these searches across the changed files. Record all findings
 
 ## Step 7: Generate REVIEW.md
 
-1. Create `$WIP/REVIEW.md` with this structure:
+1. Create `<WIP>/REVIEW.md` with this structure:
 
 ```markdown
 # Review: <feature-name>
@@ -166,7 +148,7 @@ Use Grep to execute these searches across the changed files. Record all findings
 - <issue description>
 
 ## Code Quality (via /simplify)
-- <findings from Step 1, if any>
+- <findings from Step 3, if any>
 ```
 
 2. Determine the verdict:
@@ -174,17 +156,17 @@ Use Grep to execute these searches across the changed files. Record all findings
    - **PASS WITH WARNINGS** — all tasks completed, all truths pass, but warnings exist.
    - **FAIL** — any task missing, any truth fails, or any blocking issue exists.
 
-## Step 8: Report to User
+## Step 8: Report
 
-**Evidence freshness rule.** The verdict in REVIEW.md must be based on evidence gathered during THIS execution of neural-review. Never reuse a previous REVIEW.md or assume results from a prior run still hold. If Step 6 Level 4 requires running tests, you must run them now and report the actual output — not recall or assume what they would produce.
+**Evidence freshness rule.** The verdict must be based on evidence gathered during THIS execution. Never reuse a previous REVIEW.md or assume results from a prior run still hold.
 
-1. Print a summary of the review to the conversation.
-2. Based on the verdict, present the user with options:
-   - **PASS (no warnings):** Say: "All clean! Run `/neural:archive` to archive this feature."
-   - **PASS WITH WARNINGS:** Say: "Review passed but there are warnings. What do you want to do?"
+1. Print a summary of the review.
+2. Based on the verdict, present options:
+   - **PASS (no warnings):** "All clean! Run `/neural:archive` to archive this feature."
+   - **PASS WITH WARNINGS:** "Review passed but there are warnings."
      > 1. `/neural:address-review` — fix the warnings automatically
      > 2. `/neural:archive` — archive as-is, warnings accepted
-   - **FAIL:** Say: "Issues found. What do you want to do?"
+   - **FAIL:** "Issues found."
      > 1. `/neural:address-review` — fix blocking issues and gaps automatically
      > 2. `/neural:debug` — investigate manually
      > 3. Fix manually and run `/neural:review` again
