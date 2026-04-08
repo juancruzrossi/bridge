@@ -12,7 +12,7 @@ The review must run in a clean context window — a reviewer biased by the imple
 
 1. Determine the feature name from `$ARGUMENTS`. If empty, scan `.neural/wip/` — one match → use it, multiple → ask.
 2. Set `WIP=.neural/wip/<feature>/`.
-3. Read `$WIP/BRIEF.md` and `$WIP/PLAN.md`. If either is missing, abort: "Run /neural:plan first."
+3. Read `$WIP/BRIEF.md` and `$WIP/PLAN.md`. If either is missing, abort: "Missing BRIEF.md or PLAN.md — cannot review without specs."
 4. Dispatch a subagent using the Agent tool. The subagent prompt must include:
    - The WIP path so it can read BRIEF.md, PLAN.md, and write REVIEW.md
    - Steps 2 through 8 below as its procedure
