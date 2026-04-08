@@ -159,13 +159,16 @@ If any task in the wave failed:
 
 ### 3e. Post-wave checkpoint
 
-Before advancing, run a quick health check:
+Before advancing, run a quick health check. **All commands must run from the current project root. You may be operating inside a git worktree — never navigate to a parent directory or sibling repository to run checks.**
 
-1. **Tests pass?** Run the project test suite (if one exists). If tests fail, stop and report — don't start the next wave on broken foundations.
-2. **Build OK?** Run the build command (if one exists). A failing build means the current wave left something broken.
-3. If both pass (or neither exists), proceed silently. If either fails, report the failure and ask the user whether to fix now or continue.
+1. **Build OK?** Run the project's build command. If it fails, read the error before acting:
+   - Error references files you just modified → stop, fix, re-commit.
+   - Error references toolchain, environment config, or files unrelated to this wave → pre-existing environment issue. Log it and continue.
+   - **Never use `git stash` or any other destructive git operation to test whether a failure is pre-existing. Read the error — that is sufficient.**
+2. **Tests pass?** Run the test suite only if the build succeeded. If tests fail on files you changed → stop and report.
+3. If both pass (or neither exists, or the failure is pre-existing), proceed silently.
 
-This prevents cascading errors across waves — a bug in Wave 1 that goes undetected makes Waves 2-N wrong.
+This prevents cascading errors across waves — but don't block on environmental issues outside the feature scope.
 
 ### 3f. Advance to next wave
 
