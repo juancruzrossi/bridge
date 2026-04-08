@@ -1,6 +1,7 @@
 ---
 name: neural-sync
 description: "[Neural SDD] Sync specs (BRIEF.md, PLAN.md) with post-implementation code — code as source of truth. Part of the neural plugin — invoke via /neural:sync"
+keep-coding-instructions: true
 ---
 
 # Neural Sync — Align Specs with Implementation

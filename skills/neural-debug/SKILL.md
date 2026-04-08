@@ -1,6 +1,7 @@
 ---
 name: neural-debug
 description: "[Neural SDD] Systematic root-cause investigation for bugs and failures. Part of the neural plugin — invoke via /neural:debug"
+keep-coding-instructions: true
 ---
 
 # Neural Debug

@@ -1,6 +1,7 @@
 ---
 name: neural-archive
 description: "[Neural SDD] Move completed features from wip to archive. Part of the neural plugin — invoke via /neural:archive"
+keep-coding-instructions: true
 ---
 
 # Neural Archive

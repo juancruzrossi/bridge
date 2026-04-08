@@ -1,6 +1,7 @@
 ---
 name: neural-execute
 description: "[Neural SDD] Wave-based parallel execution with fresh subagents and atomic commits. Part of the neural plugin — invoke via /neural:execute"
+keep-coding-instructions: true
 ---
 
 # Neural Execute — Wave-Based Parallel Execution

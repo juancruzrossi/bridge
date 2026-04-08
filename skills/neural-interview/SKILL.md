@@ -1,6 +1,7 @@
 ---
 name: neural-interview
 description: "[Neural SDD] Socratic interview with gray-area detection and selective pressure to clarify requirements before planning. Use when starting a new feature, building something complex, or when requirements are ambiguous. Part of the neural plugin — invoke via /neural:interview"
+keep-coding-instructions: true
 ---
 
 # Neural Interview

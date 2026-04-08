@@ -1,6 +1,7 @@
 ---
 name: using-neural
 description: "[Neural SDD] Session hook — detects complex tasks, suggests the SDD workflow, and resumes in-progress features from .neural/wip/"
+keep-coding-instructions: true
 ---
 
 # Neural SDD Framework

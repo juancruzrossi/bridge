@@ -1,6 +1,7 @@
 ---
 name: neural-review
 description: "[Neural SDD] Plan vs implementation verification with goal-backward analysis. Part of the neural plugin — invoke via /neural:review"
+keep-coding-instructions: true
 ---
 
 # Neural Review — Plan vs Implementation Verification

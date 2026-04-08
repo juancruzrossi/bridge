@@ -1,6 +1,7 @@
 ---
 name: neural-plan
 description: "[Neural SDD] Implementation planning with adversarial review and optional Codex cross-review. Part of the neural plugin — invoke via /neural:plan"
+keep-coding-instructions: true
 ---
 
 # Neural Plan — Implementation Planning

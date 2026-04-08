@@ -1,6 +1,7 @@
 ---
 name: neural-address-review
 description: "[Neural SDD] Execute all fixes from a REVIEW.md — address warnings, blocking issues, and gaps found during review. Part of the neural plugin — invoke via /neural:address-review"
+keep-coding-instructions: true
 ---
 
 # Neural Address Review — Fix Review Findings

@@ -1,6 +1,7 @@
 ---
 name: neural-status
 description: "[Neural SDD] Show progress of all features in .neural/wip/ and suggest next steps. Part of the neural plugin — invoke via /neural:status"
+keep-coding-instructions: true
 ---
 
 # Neural Status
