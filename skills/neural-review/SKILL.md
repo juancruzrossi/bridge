@@ -14,8 +14,7 @@ The review must run in a clean context window — a reviewer biased by the imple
 2. Set `WIP=.neural/wip/<feature>/`.
 3. Read `$WIP/BRIEF.md` and `$WIP/PLAN.md`. If either is missing, abort: "Run /neural:plan first."
 4. Dispatch a subagent using the Agent tool. The subagent prompt must include:
-   - The full content of BRIEF.md and PLAN.md (embedded, not as file paths)
-   - The WIP path so it can write REVIEW.md
+   - The WIP path so it can read BRIEF.md, PLAN.md, and write REVIEW.md
    - Steps 2 through 8 below as its procedure
 5. When the subagent completes, relay its verdict and options to the user verbatim.
 
