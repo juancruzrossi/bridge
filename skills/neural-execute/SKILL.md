@@ -62,11 +62,16 @@ You are executing Task <N>: <title>
    - If a build system exists: run the build and ensure it succeeds.
    - If a linter is configured: run it and fix any issues.
    - If none of the above exist: manually verify the acceptance criteria.
-5. **If the project has git initialized**, make an atomic commit for this task using conventional commits format.
-   - Commit message: "feat(<feature>): <task-title>" or appropriate type (fix, refactor, etc.)
-   - Only include files related to this task in the commit.
-   - If the project has NO git (check BRIEF.md for `**Git:** no` or run `git rev-parse --is-inside-work-tree`), skip the commit step entirely.
-6. Report back: what you did, what files you changed, verification results.
+5. **Do NOT commit.** The orchestrator handles all git writes at the end of `/neural:execute`, gated by user approval.
+   - Never run `git add`, `git commit`, `git stash`, `git restore`, or any command that mutates git state.
+   - `git diff` / `git status` are fine (read-only).
+6. Report back with:
+   - Status (DONE / DONE_WITH_CONCERNS / BLOCKED / NEEDS_CONTEXT).
+   - **Files modified** (absolute paths, one per line).
+   - **Files created** (absolute paths, one per line).
+   - **Files deleted** (absolute paths, one per line).
+   - Verification results (tests, build, lint).
+   - Any concerns or deviations.
 
 ## Decision Boundaries
 Check BRIEF.md for the "Decision Boundaries" section. It defines what you can decide on your own and what requires user approval for THIS specific feature. Apply those boundaries first. For anything not covered by Decision Boundaries, fall back to the generic Deviation Rules below.
@@ -107,7 +112,7 @@ If you encounter something unexpected or realize the task is more complex than d
 Key principles for subagent dispatch:
 - Each subagent gets a **fresh context window** — no shared state between subagents. This prevents context rot.
 - Each subagent receives the full BRIEF.md and PLAN.md so it understands the broader picture.
-- Each subagent is responsible for its own verification and commit.
+- Each subagent is responsible for its own verification. **The orchestrator owns all git operations** — subagents must not mutate git state.
 - Dispatch all tasks in the wave **in parallel** using separate Agent tool calls.
 
 **Model routing (optional).** If the runtime supports model selection for subagents, classify each task before dispatch:
@@ -146,6 +151,10 @@ Wave N complete:
   ✗ Task Z: <title> — FAILED: <error summary>
 ```
 
+### 3c-bis. Track task → files mapping (do NOT commit)
+
+Accumulate each completed task's files (modified + created + deleted), title, and inferred commit type. This mapping feeds § 5's commit phase. No git writes between waves — the orchestrator is the single writer, run once, on the user's signal.
+
 ### 3d. Handle failures
 
 If any task in the wave failed:
@@ -160,16 +169,13 @@ If any task in the wave failed:
 
 ### 3e. Post-wave checkpoint
 
-Before advancing, run a quick health check. **All commands must run from the current project root. You may be operating inside a git worktree — never navigate to a parent directory or sibling repository to run checks.**
+Before advancing, run a quick health check:
 
-1. **Build OK?** Run the project's build command. If it fails, read the error before acting:
-   - Error references files you just modified → stop, fix, re-commit.
-   - Error references toolchain, environment config, or files unrelated to this wave → pre-existing environment issue. Log it and continue.
-   - **Never use `git stash` or any other destructive git operation to test whether a failure is pre-existing. Read the error — that is sufficient.**
-2. **Tests pass?** Run the test suite only if the build succeeded. If tests fail on files you changed → stop and report.
-3. If both pass (or neither exists, or the failure is pre-existing), proceed silently.
+1. **Tests pass?** Run the project test suite (if one exists). If tests fail, stop and report — don't start the next wave on broken foundations.
+2. **Build OK?** Run the build command (if one exists). A failing build means the current wave left something broken.
+3. If both pass (or neither exists), proceed silently. If either fails, report the failure and ask the user whether to fix now or continue.
 
-This prevents cascading errors across waves — but don't block on environmental issues outside the feature scope.
+This prevents cascading errors across waves — a bug in Wave 1 that goes undetected makes Waves 2-N wrong.
 
 ### 3f. Advance to next wave
 
@@ -188,25 +194,53 @@ Remaining: [4, 5]
 Failed: [6] (skipped)
 ```
 
-## 5. Finalize
+## 5. Post-execution cleanup
 
 After all waves complete (or execution is aborted):
 
-**Post-execution cleanup.**
+1. If running on Claude Code, invoke `Skill("simplify")` on all modified files. Skip silently if unavailable or on a different runtime.
+2. Review modified files for AI-generated noise:
+   - Comments restating what the code already says (e.g. `// increment counter` above `counter++`).
+   - Over-documentation: excessive JSDoc on obvious methods, redundant type annotations.
+   - Stray `console.log` / debug output.
+3. Re-run the test suite after cleanup. If tests fail, revert the cleanup for that file.
 
-First, if running on Claude Code, invoke `Skill("simplify")` on all modified files to check for reuse opportunities, code quality, and efficiency issues. If the skill is not available or you're on a different runtime, skip this silently.
+## 6. Final report
 
-Then review all files modified during execution for common AI-generated noise:
-1. Remove unnecessary comments that restate what the code already says (e.g., `// increment counter` above `counter++`).
-2. Remove over-documentation: excessive JSDoc on obvious methods, redundant type annotations.
-3. Remove any `console.log` or debug output left behind.
-4. After cleanup, re-run the test suite to confirm nothing broke. If tests fail after cleanup, revert the cleanup changes for that file.
+1. Print: tasks completed / failed / skipped, subagent warnings. Note that the working tree still holds uncommitted changes — they will be addressed in § 7.
+2. If all succeeded, signal readiness for `/neural:review` (but only after § 7 resolves).
+3. If any failed or were skipped, note that those should be addressed before review.
 
-Then proceed with the final report:
+## 7. Commit phase (LAST step — always ask the user)
 
-1. Print a final execution report:
-   - Total tasks: completed, failed, skipped.
-   - List of all commits made (hash + message).
-   - Any warnings or notes from subagents.
-2. If all tasks completed successfully, suggest: **"Ready to review? Run `/neural:review`"**
-3. If some tasks failed or were skipped, suggest the user address remaining issues before review.
+This is the final, isolated step of `/neural:execute`. All prior steps left the working tree unstaged on purpose; only here do commits happen, and only with the user's explicit approval.
+
+Skip this entire step if BRIEF.md has `**Git:** no` or `git rev-parse --is-inside-work-tree` fails — in that case, `/neural:execute` ends after § 6.
+
+1. Print the task → files mapping accumulated in § 3c-bis:
+   ```
+   Changes ready to commit (feature <feature-name>):
+     Task 1 — <title>: <file1>, <file2>
+     Task 2 — <title>: <file3>
+     ...
+   Total: N tasks, M files, working tree unstaged.
+   ```
+2. Ask the user:
+   > "All waves completed. Progressively commit, one commit per task, in task-number order?"
+   > 1. Yes — commit now.
+   > 2. Show full diff first (`git diff` + per-task file list), then decide.
+   > 3. No — leave unstaged; I'll handle commits manually.
+3. Wait for the user's decision.
+4. **If Yes** — for each `DONE` / `DONE_WITH_CONCERNS` task, in task-number order:
+   a. Stage only the task's files by explicit path: `git add <file1> <file2> ...`. **Never use `git add -A`, `git add .`, or `git commit -am`.** Exclude `.neural/**` and files owned by other tasks.
+      - If a file is touched by multiple tasks, assign it to the last task that modified it.
+   b. Run `git diff --cached --name-only` and verify the staged set matches the task's file list. If it drifts, stop and report; do not commit.
+   c. Commit with `<type>(<feature-slug>): <task-title>` (type inferred: feature / fix / refactor / chore / test / docs).
+   d. Record the commit hash.
+
+   After the loop: run `git log --oneline <base>..HEAD` and confirm commit count equals successful task count. If it diverges, surface it.
+   If a `git commit` fails (hook rejection, hook auto-fix re-dirties the tree), stop and ask: fix & retry / skip that task / abort. Never `--no-verify`.
+5. **If Show diff** — print `git status` + per-task file list, then re-prompt from step 2.
+6. **If No** — note the working tree is left unstaged; the user owns commits from here.
+
+After this step, suggest `/neural:review`.
