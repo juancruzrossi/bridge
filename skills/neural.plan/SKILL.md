@@ -6,30 +6,32 @@ keep-coding-instructions: true
 
 # Neural Plan — Implementation Planning
 
-You are generating an implementation plan from a BRIEF.md produced by interview.
+You are generating an implementation plan from the feature `CONTEXT.md` produced by interview.
 
-## 1. Locate the brief
+## 1. Locate the feature context
 
 1. List directories under `.neural/wip/`.
 2. If exactly one feature directory exists, use it automatically.
 3. If multiple exist and the user passed `$ARGUMENTS` matching a feature name, use that one.
 4. If multiple exist and no argument matches, list them and ask: "Which feature should I plan?"
-5. Read `.neural/wip/<feature>/BRIEF.md`. If it does not exist, stop and tell the user to run `/neural.interview` first.
+5. Read `.neural/wip/<feature>/CONTEXT.md`. If it does not exist, stop and tell the user to run `/neural.interview` first.
+6. Read any ADRs under `.neural/wip/<feature>/docs/adr/` and treat them as binding decisions.
 
 ## 1b. Explore the codebase
 
 Before writing any plan, explore the codebase to ground your tasks in reality:
 
 1. Scan the project structure — identify frameworks, patterns, and conventions in use.
-2. Read files related to the feature described in BRIEF.md — existing models, routes, components, tests.
+2. Read files related to the feature described in `CONTEXT.md` — existing models, routes, components, tests.
 3. Identify dependencies and integration points that tasks will need to interact with.
 4. Note existing patterns the implementation should follow (naming conventions, folder structure, error handling style).
+5. Cross-check feature language against existing code and docs. If `CONTEXT.md` says a domain term or relationship that contradicts the code, stop and ask the user to resolve it before planning.
 
 This step prevents plans based on assumptions. A plan grounded in the actual codebase is dramatically more executable than one based on guesswork.
 
 ## 2. Generate the plan (single pass)
 
-Read the full BRIEF.md content. Then produce `.neural/wip/<feature>/PLAN.md` with this structure:
+Read the full feature context and ADRs. Then produce `.neural/wip/<feature>/PLAN.md` with this structure:
 
 ```markdown
 # Plan: <feature-name>
@@ -83,7 +85,7 @@ Each wave MUST be a vertical slice — end-to-end through all layers, not a hori
 
 - [ ] Criterion 1
 - [ ] Criterion 2
-<!-- Derived from BRIEF.md requirements -->
+<!-- Derived from CONTEXT.md acceptance criteria and ADRs -->
 ```
 
 Rules for task generation:
@@ -92,7 +94,7 @@ Rules for task generation:
 - Declare dependencies explicitly (task numbers or "—" for none).
 - Estimate as S (< 30 min), M (30-120 min), L (> 2 hrs).
 - Group into waves: tasks with no unmet dependencies share a wave.
-- Derive acceptance criteria directly from the BRIEF's requirements.
+- Derive acceptance criteria directly from `CONTEXT.md` and feature ADRs.
 - Each task must include a concrete Verification step: test command, build/lint command, manual check, or code inspection target.
 - **Vertical slices are mandatory.** Every wave MUST deliver end-to-end functionality cutting through all layers (data → logic → interface → test), not horizontal slabs of a single layer. A wave that produces "all database models" or "all API endpoints" is a plan failure — restructure it so each wave delivers one complete, verifiable feature slice. Example: Wave 1 delivers login (schema + API + UI + test), not Wave 1 delivers all schemas.
 
@@ -103,7 +105,7 @@ Rules for task generation:
 - "align X with Y" (state the concrete target)
 - "add necessary tests" (specify WHICH test cases)
 
-If you can't be specific, the brief needs more detail — go back to `/neural.interview`.
+If you can't be specific, the feature context needs more detail — go back to `/neural.interview`.
 
 ## 3. Adversarial self-review
 
@@ -111,10 +113,10 @@ After writing the plan, perform a second pass asking:
 
 1. **Missing edge cases**: Are there inputs, states, or flows the tasks don't cover?
 2. **Dependency gaps**: Could any task fail because a predecessor is incomplete?
-3. **Scope creep**: Does any task exceed what the BRIEF asks for?
+3. **Scope creep**: Does any task exceed what `CONTEXT.md` asks for?
 4. **Integration risk**: Will the waves actually work in parallel, or are there hidden coupling points?
 5. **Rollback**: If a wave fails, can we revert cleanly?
-6. **Requirements coverage**: Does every requirement from the BRIEF appear in at least one task? List any BRIEF requirements not covered by the plan.
+6. **Requirements coverage**: Does every requirement from `CONTEXT.md` and the ADRs appear in at least one task? List any context requirements not covered by the plan.
 7. **Vertical slice check**: Is every wave a vertical slice through all relevant layers? If any wave only touches one layer (e.g., "all models" or "all endpoints"), restructure it into feature-complete slices.
 
 Append findings as a section to PLAN.md:
@@ -140,15 +142,18 @@ After writing PLAN.md:
 2. If codex is available, ask the user: **"Codex is available. Want to send this plan for adversarial review?"**
 3. If the user declines, go to step 5.
 4. If the user accepts:
-   a. First, try to invoke `Skill("codex:adversarial-review")` passing the BRIEF and PLAN content.
+   a. First, try to invoke `Skill("codex:adversarial-review")` passing the feature context, ADRs, and PLAN content.
    b. If the skill is not available or fails, fall back to running codex directly. **Important:** use `--dangerously-bypass-approvals-and-sandbox` to avoid git/trust prompts:
       ```
       codex exec --dangerously-bypass-approvals-and-sandbox -c 'model_reasoning_effort="high"' "Context: <project-name> (<tech stack detected from codebase>). Relevant docs: @/CLAUDE.md
 
-You are an adversarial reviewer. Review this implementation plan against the brief. Find critical issues, missing edge cases, architectural risks, dependency gaps.
+You are an adversarial reviewer. Review this implementation plan against the feature context and ADRs. Find critical issues, missing edge cases, architectural risks, dependency gaps.
 
-BRIEF:
-<brief-content>
+FEATURE CONTEXT:
+<CONTEXT.md content>
+
+FEATURE ADRS:
+<ADR contents or "none">
 
 PLAN:
 <plan-content>

@@ -12,7 +12,7 @@ Neural is a Spec-Driven Development framework. It provides a structured workflow
 
 | Claude Code | Codex | Phase | Purpose |
 |-------------|-------|-------|---------|
-| `/neural.interview` | `$neural.interview` | Clarification | Socratic interview → generates BRIEF.md |
+| `/neural.interview` | `$neural.interview` | Clarification | Socratic interview → generates CONTEXT.md |
 | `/neural.plan` | `$neural.plan` | Planning | Implementation plan with adversarial review → generates PLAN.md |
 | `/neural.execute` | `$neural.execute` | Implementation | Wave-based parallel execution with fresh subagents |
 | `/neural.review` | `$neural.review` | Verification | Plan vs implementation + goal-backward verification |
@@ -47,13 +47,13 @@ Do NOT suggest neural for:
 On session start, check if `.neural/wip/` exists in the current working directory. If it does:
 
 1. List all feature directories in `.neural/wip/`
-2. For each, check which artifacts exist (BRIEF.md, PLAN.md, REVIEW.md)
+2. For each, check which artifacts exist (CONTEXT.md, PLAN.md, REVIEW.md)
 3. Announce: "Neural SDD: Found in-progress feature(s)" and suggest the next step
 
 Example:
 ```
 Neural SDD: Found in-progress feature "auth-system"
-  ✓ BRIEF.md (interview complete)
+  ✓ CONTEXT.md (interview complete)
   ✓ PLAN.md (plan complete)
   ✗ REVIEW.md (not yet reviewed)
   → Suggest: /neural.execute or /neural.review
@@ -66,11 +66,11 @@ All Neural artifacts live in `.neural/` at the project root:
 ```
 .neural/
 ├── wip/<feature-name>/
-│   ├── BRIEF.md      ← interview output
+│   ├── CONTEXT.md    ← interview output
 │   ├── PLAN.md       ← plan output
 │   └── REVIEW.md     ← review output
 └── archive/<feature-name>/
-    ├── BRIEF.md
+    ├── CONTEXT.md
     ├── PLAN.md
     └── REVIEW.md
 ```

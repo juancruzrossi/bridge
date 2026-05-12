@@ -20,7 +20,7 @@ Show the Neural command reference for the current agent.
 Neural SDD — Plugin Commands
 
 Workflow:
-  /neural.interview       Detailed interview → generates BRIEF.md
+  /neural.interview       Socratic interview → generates CONTEXT.md
   /neural.plan            Implementation plan with adversarial review → generates PLAN.md
   /neural.execute         Wave-based parallel execution with fresh subagents
   /neural.review          Plan vs implementation + goal-backward verification → generates REVIEW.md
@@ -43,7 +43,7 @@ Typical flow: interview → plan → execute → review → archive
 Neural SDD — Plugin Commands
 
 Workflow:
-  $neural.interview       Detailed interview → generates BRIEF.md
+  $neural.interview       Socratic interview → generates CONTEXT.md
   $neural.plan            Implementation plan with adversarial review → generates PLAN.md
   $neural.execute         Wave-based parallel execution with fresh subagents
   $neural.review          Plan vs implementation + goal-backward verification → generates REVIEW.md

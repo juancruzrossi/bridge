@@ -15,7 +15,8 @@ You are executing an implementation plan from a PLAN.md produced by plan.
 3. If multiple exist and the user passed `$ARGUMENTS` matching a feature name, use that one.
 4. If multiple exist and no argument matches, list them and ask: "Which feature should I execute?"
 5. Read `.neural/wip/<feature>/PLAN.md`. If it does not exist, stop and tell the user to run `/neural.plan` first.
-6. Read `.neural/wip/<feature>/BRIEF.md` for context. If it does not exist, warn but continue with PLAN.md only.
+6. Read `.neural/wip/<feature>/CONTEXT.md`. If it does not exist, stop and tell the user to run `/neural.interview` first.
+7. Read any ADRs under `.neural/wip/<feature>/docs/adr/`.
 
 ## 2. Parse tasks and build the dependency graph
 
@@ -45,7 +46,10 @@ For each task in the wave, dispatch a subagent using the Agent tool with the fol
 You are executing Task <N>: <title>
 
 ## Context
-<Full BRIEF.md content>
+<Full CONTEXT.md content>
+
+## Feature ADRs
+<Full contents of .neural/wip/<feature>/docs/adr/*.md, or "none">
 
 ## Implementation Plan
 <Full PLAN.md content>
@@ -74,7 +78,7 @@ You are executing Task <N>: <title>
    - Any concerns or deviations.
 
 ## Decision Boundaries
-Check BRIEF.md for the "Decision Boundaries" section. It defines what you can decide on your own and what requires user approval for THIS specific feature. Apply those boundaries first. For anything not covered by Decision Boundaries, fall back to the generic Deviation Rules below.
+Check CONTEXT.md for the "Decision Boundaries" section. It defines what you can decide on your own and what requires user approval for THIS specific feature. Apply those boundaries first. For anything not covered by Decision Boundaries, fall back to the generic Deviation Rules below.
 
 ## Deviation Rules
 When you encounter something not explicitly covered in the task or in Decision Boundaries:
@@ -111,7 +115,7 @@ If you encounter something unexpected or realize the task is more complex than d
 
 Key principles for subagent dispatch:
 - Each subagent gets a **fresh context window** — no shared state between subagents. This prevents context rot.
-- Each subagent receives the full BRIEF.md and PLAN.md so it understands the broader picture.
+- Each subagent receives the full CONTEXT.md, feature ADRs, and PLAN.md so it understands the broader picture.
 - Each subagent is responsible for its own verification. **The orchestrator owns all git operations** — subagents must not mutate git state.
 - Dispatch all tasks in the wave **in parallel** using separate Agent tool calls.
 
@@ -146,8 +150,8 @@ If the verification returns CONCERNS or FAILED, report to the user before procee
 
 ```
 Wave N complete:
-  ✓ Task X: <title> — <brief summary of changes>
-  ✓ Task Y: <title> — <brief summary of changes>
+  ✓ Task X: <title> — <short summary of changes>
+  ✓ Task Y: <title> — <short summary of changes>
   ✗ Task Z: <title> — FAILED: <error summary>
 ```
 
@@ -215,7 +219,7 @@ After all waves complete (or execution is aborted):
 
 This is the final, isolated step of `/neural.execute`. All prior steps left the working tree unstaged on purpose; only here do commits happen, and only with the user's explicit approval.
 
-Skip this entire step if BRIEF.md has `**Git:** no` or `git rev-parse --is-inside-work-tree` fails — in that case, `/neural.execute` ends after § 6.
+Skip this entire step if CONTEXT.md has `**Git:** no` or `git rev-parse --is-inside-work-tree` fails — in that case, `/neural.execute` ends after § 6.
 
 1. Print the task → files mapping accumulated in § 3c-bis:
    ```

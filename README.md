@@ -49,7 +49,7 @@ curl -fsSL https://raw.githubusercontent.com/juancruzrossi/neural/main/.codex/in
 
 ### `/neural.interview` — Clarify before you build
 
-Socratic interview that identifies gray areas in your requirements and resolves them one by one. Uses selective pressure — challenges assumptions only where risk is high. Locks decisions into a `BRIEF.md`. Detects git status and handles non-git projects gracefully.
+Socratic interview that clarifies requirements and captures concise feature context in `CONTEXT.md`.
 
 ### `/neural.plan` — Plan with adversarial review
 
@@ -57,7 +57,7 @@ Generates an implementation plan with tasks, dependencies, and wave grouping for
 
 ### `/neural.execute` — Parallel execution with fresh context
 
-Groups tasks into dependency waves. Dispatches independent tasks to parallel subagents, each with a clean context window — no accumulated noise, no quality degradation. Smart model routing: routine tasks go to lightweight models, complex tasks to premium ones. Every subagent verifies its own work before committing.
+Groups tasks into dependency waves. Dispatches independent tasks to parallel subagents, each with a clean context window and the feature `CONTEXT.md`. Smart model routing: routine tasks go to lightweight models, complex tasks to premium ones. Every subagent verifies its own work before committing.
 
 ### `/neural.review` — Verify against the goal, not the task list
 
@@ -79,7 +79,7 @@ Four-phase systematic debugging: investigate → analyze → hypothesize → imp
 
 ### `/neural.sync` — Align specs with reality
 
-After implementation, code evolves — refactors, bug fixes, scope changes. Specs go stale. Sync reads the actual codebase and updates BRIEF.md and PLAN.md to match what was built. Code is the source of truth.
+After implementation, code evolves — refactors, bug fixes, scope changes. Specs go stale. Sync reads the actual codebase and updates CONTEXT.md and PLAN.md to match what was built. Code is the source of truth.
 
 ### `/neural.status` — Where am I?
 
@@ -91,7 +91,7 @@ Moves completed features from `.neural/wip/` to `.neural/archive/`.
 
 ### `/neural.help` — Command reference
 
-Shows all available Neural plugin commands with brief descriptions and the recommended workflow.
+Shows all available Neural plugin commands with short descriptions and the recommended workflow.
 
 ## Artifacts
 
@@ -101,12 +101,14 @@ All Neural artifacts live in `.neural/` at your project root:
 .neural/
 ├── wip/
 │   └── auth-system/
-│       ├── BRIEF.md      ← interview output
+│       ├── CONTEXT.md    ← interview output
+│       ├── docs/adr/     ← optional feature decisions
 │       ├── PLAN.md       ← plan output
 │       └── REVIEW.md     ← review output
 └── archive/
     └── user-onboarding/
-        ├── BRIEF.md
+        ├── CONTEXT.md
+        ├── docs/adr/
         ├── PLAN.md
         └── REVIEW.md
 ```

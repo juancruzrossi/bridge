@@ -1,12 +1,12 @@
 ---
 name: neural.sync
-description: "[Neural SDD] Sync specs (BRIEF.md, PLAN.md) with post-implementation code — code as source of truth. Part of the neural plugin — invoke via /neural.sync"
+description: "[Neural SDD] Sync specs (CONTEXT.md, PLAN.md) with post-implementation code — code as source of truth. Part of the neural plugin — invoke via /neural.sync"
 keep-coding-instructions: true
 ---
 
 # Neural Sync — Align Specs with Implementation
 
-Specs drift after implementation — refactors, bug fixes, scope changes. This skill updates BRIEF.md and PLAN.md to match what was actually built, so the artifacts remain useful as documentation rather than a misleading snapshot of what was planned.
+Specs drift after implementation — refactors, bug fixes, scope changes. This skill updates CONTEXT.md and PLAN.md to match what was actually built, so the artifacts remain useful.
 
 **Core principle:** Code as source of truth. Specs conform to code, never the reverse.
 
@@ -14,7 +14,7 @@ Specs drift after implementation — refactors, bug fixes, scope changes. This s
 
 1. Determine feature name from `$ARGUMENTS`. If empty, scan `.neural/wip/` and `.neural/archive/`. One match → use it. Multiple → ask the user.
 2. Set `DIR=.neural/<wip|archive>/<feature>/`.
-3. Read `BRIEF.md` and `PLAN.md` from `$DIR`. Both must exist — abort if missing.
+3. Read `CONTEXT.md` and `PLAN.md` from `$DIR`. Both must exist — abort if missing.
 
 ## Step 2: Build the Delta
 
@@ -38,7 +38,7 @@ For each task in the plan:
 
 Preserve the original structure (waves, dependencies). Only touch content that diverged.
 
-## Step 4: Update BRIEF.md
+## Step 4: Update CONTEXT.md
 
 Surgical updates only — do not rewrite from scratch:
 
@@ -46,7 +46,7 @@ Surgical updates only — do not rewrite from scratch:
 - **Scope changes** — add or remove items from the scope section.
 - **Technical shifts** — update stack/approach if implementation diverged.
 
-The brief should read as if it was written with knowledge of what was actually built.
+The context should read as if it was written with knowledge of what was actually built.
 
 ## Step 5: Handle REVIEW.md
 
@@ -58,7 +58,7 @@ If `REVIEW.md` exists, delete it. A review based on stale specs is misleading �
 Neural Sync: <feature-name>
 
 PLAN.md: X updated, Y added, Z removed
-BRIEF.md: N decisions updated, M scope changes
+CONTEXT.md: N decisions updated, M scope changes
 ```
 
 If in `archive/`: "This feature is archived. Synced specs serve as documentation."

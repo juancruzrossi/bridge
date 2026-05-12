@@ -6,7 +6,7 @@ keep-coding-instructions: true
 
 # Neural Quick — Fast-Path Execution
 
-Self-contained fast-path for small, clear tasks. No files are generated (no BRIEF.md, PLAN.md, or .neural/ artifacts). The entire cycle happens in the conversation.
+Self-contained fast-path for small, clear tasks. No files are generated (no CONTEXT.md, PLAN.md, or .neural/ artifacts). The entire cycle happens in the conversation.
 
 ## When to Use
 
