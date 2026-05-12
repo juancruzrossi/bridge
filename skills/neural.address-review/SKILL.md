@@ -15,7 +15,7 @@ You are executing the fixes identified in a REVIEW.md produced by review.
 3. If multiple exist and the user passed `$ARGUMENTS` matching a feature name, use that one.
 4. If multiple exist and no argument matches, list them and ask: "Which feature's review should I address?"
 5. Read `.neural/wip/<feature>/REVIEW.md`. If it does not exist, stop and tell the user to run `/neural.review` first.
-6. Read `.neural/wip/<feature>/BRIEF.md` and `.neural/wip/<feature>/PLAN.md` for context.
+6. Read `.neural/wip/<feature>/CONTEXT.md` and `.neural/wip/<feature>/PLAN.md` for context.
 
 ## 2. Parse review findings
 
@@ -52,7 +52,7 @@ For each fix task:
 2. If running on Claude Code, invoke `Skill("simplify")` on modified files. Skip silently on other runtimes.
 3. Verify the fix addresses the specific issue (run relevant tests, check the file, confirm the anti-pattern is gone).
 4. **If the project has git initialized**, make an atomic commit per fix:
-   - `fix(<feature>): address review — <brief description>`
+   - `fix(<feature>): address review — <short description>`
    - If no git, skip commits.
 
 For multiple independent fixes, dispatch subagents in parallel.

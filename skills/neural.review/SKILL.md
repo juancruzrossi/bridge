@@ -12,9 +12,9 @@ The review must run in a clean context window — a reviewer biased by the imple
 
 1. Determine the feature name from `$ARGUMENTS`. If empty, scan `.neural/wip/` — one match → use it, multiple → ask.
 2. Set `WIP=.neural/wip/<feature>/`.
-3. Read `$WIP/BRIEF.md` and `$WIP/PLAN.md`. If either is missing, abort: "Missing BRIEF.md or PLAN.md — cannot review without specs."
+3. Read `$WIP/CONTEXT.md` and `$WIP/PLAN.md`. If either is missing, abort: "Missing CONTEXT.md or PLAN.md — cannot review without specs."
 4. Dispatch a subagent using the Agent tool. The subagent prompt must include:
-   - The WIP path so it can read BRIEF.md, PLAN.md, and write REVIEW.md
+   - The WIP path so it can read CONTEXT.md, PLAN.md, and write REVIEW.md
    - Steps 2 through 8 below as its procedure
 5. When the subagent completes, relay its verdict and options to the user verbatim.
 
@@ -24,7 +24,7 @@ The review must run in a clean context window — a reviewer biased by the imple
 
 ## Step 2: Load Stack-Relevant Skills
 
-1. Read BRIEF.md and PLAN.md to identify the tech stack (frameworks, databases, languages).
+1. Read CONTEXT.md and PLAN.md to identify the tech stack (frameworks, databases, languages).
 2. For each technology identified, attempt to load a matching skill using the Skill tool (e.g., "react-best-practices").
 3. If a skill exists and loads, use its guidelines during the review to catch stack-specific issues.
 4. If no matching skill exists, proceed without it — do not fail or warn.
@@ -63,7 +63,7 @@ Use Grep to execute these searches across the changed files. Record all findings
 
 ## Step 6: Layer 2 — Goal-Backward Verification
 
-1. Read the **Problem** section of BRIEF.md.
+1. Read the **Problem** section of CONTEXT.md.
 2. Derive "observable truths" — concrete, testable statements that must hold if the problem is truly solved. Example: "A user can POST /api/orders and receive a 201 with an order ID."
 3. For each observable truth, verify 4 levels:
 
