@@ -55,10 +55,12 @@ _Avoid_: <aliases>
 
 ## Rules
 
-- Only domain-meaningful terms in `Language`. No generic programming concepts.
-- The body describes the domain, not the implementation.
+- `Language` is a glossary, not a scratch pad. No implementation details, no decisions, no acceptance criteria — those have their own sections.
+- Only domain-meaningful terms in `Language`. Skip generic programming concepts (timeouts, error types, utility patterns) even if the feature uses them.
 - One sentence per definition — what it IS, not what it does.
+- Be opinionated: when multiple words exist for the same concept, pick one and list the rest under `_Avoid_`.
 - Express cardinality in `Relationships` when obvious.
+- Flag genuine ambiguities explicitly under `Flagged Ambiguities` with a clear resolution.
 
 ## Multi-context repos
 
