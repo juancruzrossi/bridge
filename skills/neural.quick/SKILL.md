@@ -49,12 +49,7 @@ Rules:
 
 ### Step 3 — Execute
 
-Implement the tasks from the plan.
-
-- For small work (1-2 tasks): execute directly, sequentially.
-- For 3+ independent tasks: use subagents to parallelize.
-- Follow existing code style and conventions in the repo.
-- Do NOT create documentation files, READMEs, or architectural docs unless explicitly requested.
+Implement the tasks from the plan sequentially. Follow existing code style and conventions. Do NOT create documentation files, READMEs, or architectural docs unless explicitly requested.
 
 ### Step 4 — Light Review
 

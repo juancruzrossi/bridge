@@ -46,16 +46,14 @@ Show this plan to the user and wait for confirmation before executing.
 
 ## 4. Execute fixes
 
-For each fix task:
+Apply fixes one at a time, in the order listed:
 
 1. Implement the fix.
 2. If running on Claude Code, invoke `Skill("simplify")` on modified files. Skip silently on other runtimes.
 3. Verify the fix addresses the specific issue (run relevant tests, check the file, confirm the anti-pattern is gone).
-4. **If the project has git initialized**, make an atomic commit per fix:
+4. **If the project has git initialized**, commit before moving on:
    - `fix(<feature>): address review — <short description>`
    - If no git, skip commits.
-
-For multiple independent fixes, dispatch subagents in parallel.
 
 ## 5. Re-run verification
 
